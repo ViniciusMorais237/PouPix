@@ -1,0 +1,31 @@
+using System.Data;
+using API.Interfaces.Repositories;
+using API.Interfaces.Services;
+using API.Repositories;
+using API.Services;
+using Microsoft.Data.SqlClient;
+
+namespace API.Config
+
+{
+    public static class DIConfig
+    {
+        public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            services.AddScoped<IDbConnection>(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                var connectionString = config.GetConnectionString("DefaultConnection");
+                return new SqlConnection(connectionString);
+            });
+
+            services.AddScoped<IPaginaInicialService, PaginaInicialService>();
+            services.AddScoped<IPaginaInicialRepository, PaginaInicialRepository>();
+            services.AddScoped<IComprasService, ComprasService>();
+            services.AddScoped<IComprasRepository, ComprasRepository>();
+
+            return services;
+        }
+    }
+}

@@ -33,6 +33,12 @@ namespace API.Controllers
         {
             return Ok(await _comprasService.GetHistoricoCompras(date));
         }
+        [HttpGet("")]
+        [ProducesResponseType(typeof(HistoricoCompra), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetHistorico(DateTime data)
+        {
+            return Ok(await _comprasService.GetHistoricoCompras(data.ToString()));
+        }
         
         [HttpPost("categorias")]
         [ProducesResponseType(typeof(CategoriaCompra), StatusCodes.Status201Created)]

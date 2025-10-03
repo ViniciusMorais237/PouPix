@@ -10,8 +10,8 @@ namespace API.Entities.Dto
         public string Nome { get; set; }
         public decimal Valor { get; set; }
         public int IdCategoria { get; set; }
-        public string Categoria { get; set; }
-        public DateTime Data { get; set; }
+        public string? Categoria { get; set; } = "NAO";
+        public DateTime Data { get; set; } = DateTime.Now;
         public string? Comentario { get; set; }
     }
 }

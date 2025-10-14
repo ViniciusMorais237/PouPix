@@ -3,6 +3,7 @@ using API.Config;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

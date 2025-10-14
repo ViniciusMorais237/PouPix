@@ -24,6 +24,8 @@ namespace API.Config
             services.AddScoped<IPaginaInicialRepository, PaginaInicialRepository>();
             services.AddScoped<IComprasService, ComprasService>();
             services.AddScoped<IComprasRepository, ComprasRepository>();
+            services.AddScoped<IAnotacoesService, AnotacoesService>();
+            services.AddScoped<IAnotacoesRepository, AnotacoesRepository>();
 
             return services;
         }

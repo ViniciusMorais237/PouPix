@@ -17,6 +17,11 @@ namespace API.Repositories
             _connection = connection;
         }
 
+        public IDbConnection GetConnection()
+        {
+            return _connection;
+        }
+
         public Task<bool> Delete(object id)
         {
             throw new NotImplementedException();

@@ -15,5 +15,14 @@ namespace API.Services
             file.CopyTo(fileStream);
             return filePath;
         }
+
+        public static string? LerImagemComoBase64(string? path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                return null;
+
+            byte[] bytes = File.ReadAllBytes(path);
+            return Convert.ToBase64String(bytes);
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
+using API.Entities.Dto;
 using API.Interfaces.Repositories;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -32,6 +33,19 @@ namespace API.Repositories
                 return anotacao;
 
             throw new InvalidOperationException("Anotacao deu pobrema");
+        }
+
+        public async Task<IEnumerable<Anotacao>> ObterAnotacoesPorDia(DateTime date)
+        {
+            using var connection = GetConnection();
+            var param = new DynamicParameters(new { DATE = date });
+            var query = @"SELECT [NU_NSU_ANOT] AS Id
+                        ,[DES_TEXT] AS Texto
+                        ,[DT_HR] AS Data
+                        ,[URL_IMG] AS ImagemUrl
+                    FROM [GerenciadorDeDenhero].[dbo].[ANOTACOES]
+                    WHERE CAST(DT_HR AS DATE) = CAST(@DATE AS DATE)";
+            return await connection.QueryAsync<Anotacao>(query, param);
         }
     }
 }

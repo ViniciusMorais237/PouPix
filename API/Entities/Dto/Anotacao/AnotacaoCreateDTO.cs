@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace API.Entities
+namespace API.Entities.Dto
 {
-    public class Anotacao
+    public class AnotacaoCreateDTO
     {
-        public int Id { get; set; }
         public string Texto { get; set; } = string.Empty;
         public DateTime Data { get; set; } = DateTime.Now;
-        public string? ImagemUrl { get; set; } = string.Empty;
+        public IFormFile? Imagem { get; set; }
     }
 }

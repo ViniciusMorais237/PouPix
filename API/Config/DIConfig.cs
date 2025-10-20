@@ -16,12 +16,12 @@ namespace API.Config
             services.AddScoped<IDbConnection>(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
-                var connectionString = config.GetConnectionString("DefaultConnection");
+                var connectionString = config.GetConnectionString("DockerConnection");
                 return new SqlConnection(connectionString);
             });
 
-            services.AddScoped<IPaginaInicialService, PaginaInicialService>();
-            services.AddScoped<IPaginaInicialRepository, PaginaInicialRepository>();
+            services.AddScoped<IInfoBankService, InfoBankService>();
+            services.AddScoped<IInfoBankRepository, InfoBankRepository>();
             services.AddScoped<IComprasService, ComprasService>();
             services.AddScoped<IComprasRepository, ComprasRepository>();
             services.AddScoped<IAnotacoesService, AnotacoesService>();

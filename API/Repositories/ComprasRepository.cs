@@ -47,6 +47,11 @@ namespace API.Repositories
             return await GetAll<HistoricoCompra>(query, param);
         }
 
+        public Task<Dictionary<int, IEnumerable<HistoricoCompra>>> GetHistoricoCompras(DateTime firstDate, DateTime secondDate)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> PostCategoria(string nome)
         {
             Dictionary<string, object> propriedadeInserida = new Dictionary<string, object>

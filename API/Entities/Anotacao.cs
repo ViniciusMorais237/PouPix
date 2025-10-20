@@ -9,7 +9,7 @@ namespace API.Entities
     {
         public int Id { get; set; }
         public string Texto { get; set; } = string.Empty;
-        public DateTime Data { get; set; } = DateTime.Now;
+        public DateTime Data { get; set; } = DateTime.UtcNow;
         public string? ImagemUrl { get; set; } = string.Empty;
     }
 }

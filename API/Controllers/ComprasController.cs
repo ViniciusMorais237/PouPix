@@ -40,6 +40,9 @@ namespace API.Controllers
             return Ok(await _comprasService.GetHistoricoCompras(data.ToString()));
         }
         
+        [HttpGet()]
+
+
         [HttpPost("categorias")]
         [ProducesResponseType(typeof(CategoriaCompra), StatusCodes.Status201Created)]
         public async Task<IActionResult> PostCategoria(string nome)

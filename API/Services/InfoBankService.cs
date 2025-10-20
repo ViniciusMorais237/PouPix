@@ -7,35 +7,45 @@ using API.Interfaces.Services;
 
 namespace API.Services
 {
-    public class PaginaInicialService : IPaginaInicialService
+    public class InfoBankService : IInfoBankService
     {
-        private readonly IPaginaInicialRepository _paginaInicialRepository;
-        protected string _tabela = "[GerenciadorDeDenhero].[dbo].[Indicadores]";
+        private readonly IInfoBankRepository _InfoBankRepository;
+        protected string _tabela = "[GerenciadorDeDenhero].[dbo].[InfoBank]";
         private readonly Dictionary<string, string> mapeamentoBanco = new Dictionary<string, string>
         {
             {"Saldo", "NU_SALDO"},
             {"Renda", "NU_RENDA"},
             {"LimiteCredito", "NU_LIMITE_CREDITO"},
             {"LimiteCreditoTotal", "NU_LIMITE_CREDITO_TOTAL"},
+            {"Fatura", "NU_FATURA"},
             {"DiaPagamento", "DATA_PAGAMENTO"}
         };
-        public PaginaInicialService(IPaginaInicialRepository paginaInicialRepository)
+        public InfoBankService(IInfoBankRepository InfoBankRepository)
         {
-            _paginaInicialRepository = paginaInicialRepository;
-            
+            _InfoBankRepository = InfoBankRepository;
+
         }
 
-        public async Task<bool> EditarIndicadoresPaginaInicial(EdicaoIndicadoresDto edicaoIndicadores)
+        public async Task<InfoBank> ObterInfoBank()
+        {
+            return await _InfoBankRepository.ObterInfoBank();
+        }
+
+        public async Task<IEnumerable<MonetarioDiario>> ObterInfoMoney()
+        {
+            var infoBank = await _InfoBankRepository.ObterInfoBank();
+
+            var LimiteDiario = infoBank.DiaPagamento.Day;
+
+
+        }
+
+        public async Task<bool> EditarInfoBank(EdicaoIndicadoresDto edicaoIndicadores)
         {
             var camposEditados = RetornarCamposEditados(edicaoIndicadores);
             var (query, param) = MontarUpdateQuery(camposEditados, mapeamentoBanco);
-            return await _paginaInicialRepository.EditarIndicadoresPaginaInicial(query, param);
+            return await _InfoBankRepository.EditarInfoBank(query, param);
 
-        }
-
-        public async Task<IndicadoresPaginaInicial> ObterIndicadoresPaginaInicial()
-        {
-            return await _paginaInicialRepository.ObterIndicadoresPaginaInicial();
         }
 
         protected Dictionary<string, object> RetornarCamposEditados(object objetoEditado)
@@ -76,6 +86,28 @@ namespace API.Services
             var query = $"UPDATE {_tabela} SET {chaveValor}";
             return (query, param);
         }
+
+        protected async decimal CalcularLimiteGastoDiario()
+        {
+            var dias = CalcularDiasAtePagamento();
+
+        }
+
+        protected async Task<int> CalcularDiasAtePagamento()
+        {
+            var infoBank = await _InfoBankRepository.ObterInfoBank();
+            var diaPagamento = infoBank.DiaPagamento;
+            var hoje = DateTime.Now;
+
+            if (diaPagamento < hoje)
+            {
+                diaPagamento = diaPagamento.AddMonths(1);
+            }
+
+            int diasRestantes = (diaPagamento - hoje).Days;
+            return diasRestantes;
+        }
+
 
     }
 }

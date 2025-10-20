@@ -13,5 +13,6 @@ namespace API.Interfaces.Repositories
         Task<IEnumerable<CategoriaCompra>> GetCategorias();
         Task<bool> PostCompra(CompraInsertDTO compra);
         Task<IEnumerable<HistoricoCompra>> GetHistoricoCompras(string date);
+        Task<Dictionary<int, IEnumerable<HistoricoCompra>>> GetHistoricoCompras(DateTime firstDate, DateTime secondDate);
     }
 }

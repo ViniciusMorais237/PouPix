@@ -35,16 +35,23 @@ namespace API.Repositories
             throw new InvalidOperationException("Anotacao deu pobrema");
         }
 
-        public async Task<IEnumerable<Anotacao>> ObterAnotacoesPorDia(DateTime date)
+        public async Task<IEnumerable<Anotacao>> ObterAnotacoesPorDia(DateTime? date)
         {
             using var connection = GetConnection();
-            var param = new DynamicParameters(new { DATE = date });
-            var query = @"SELECT [NU_NSU_ANOT] AS Id
+            var where = string.Empty;
+            var param = new DynamicParameters();
+
+            if (date.HasValue)
+            {
+                where = "WHERE CAST(DT_HR AS DATE) = CAST(@DATE AS DATE)";
+                param.Add("DATE", date);
+            }
+            
+            var query = $@"SELECT [NU_NSU_ANOT] AS Id
                         ,[DES_TEXT] AS Texto
                         ,[DT_HR] AS Data
                         ,[URL_IMG] AS ImagemUrl
-                    FROM [GerenciadorDeDenhero].[dbo].[ANOTACOES]
-                    WHERE CAST(DT_HR AS DATE) = CAST(@DATE AS DATE)";
+                    FROM [GerenciadorDeDenhero].[dbo].[ANOTACOES] {where}";
             return await connection.QueryAsync<Anotacao>(query, param);
         }
     }

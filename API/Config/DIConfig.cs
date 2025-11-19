@@ -16,7 +16,7 @@ namespace API.Config
             services.AddScoped<IDbConnection>(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
-                var connectionString = config.GetConnectionString("DockerConnection");
+                var connectionString = config.GetConnectionString("DefaultConnection");
                 return new SqlConnection(connectionString);
             });
 

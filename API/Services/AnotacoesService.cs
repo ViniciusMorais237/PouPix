@@ -35,7 +35,7 @@ namespace API.Services
             return anotacaoInserida;
         }
 
-        public async Task<IEnumerable<AnotacaoResponseDTO?>> ObterAnotacoesPorDia(DateTime date)
+        public async Task<IEnumerable<AnotacaoResponseDTO?>> ObterAnotacoesPorDia(DateTime? date)
         {
             var anotacoes = await _repository.ObterAnotacoesPorDia(date);
             return _mapper.Map<IEnumerable<AnotacaoResponseDTO>>(anotacoes);

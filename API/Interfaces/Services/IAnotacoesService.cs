@@ -10,6 +10,6 @@ namespace API.Interfaces.Services
     public interface IAnotacoesService
     {
         Task<Anotacao> Anotar(AnotacaoCreateDTO anotacao);
-        Task<IEnumerable<AnotacaoResponseDTO?>> ObterAnotacoesPorDia(DateTime date);
+        Task<IEnumerable<AnotacaoResponseDTO?>> ObterAnotacoesPorDia(DateTime? date);
     }
 }

@@ -10,6 +10,6 @@ namespace API.Interfaces.Repositories
     public interface IAnotacoesRepository
     {
         Task<Anotacao> InserirAnotacaoRetornando(Anotacao anotacao);
-        Task<IEnumerable<Anotacao>> ObterAnotacoesPorDia(DateTime date);
+        Task<IEnumerable<Anotacao>> ObterAnotacoesPorDia(DateTime? date);
     }
 }

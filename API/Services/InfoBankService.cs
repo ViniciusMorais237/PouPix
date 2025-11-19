@@ -37,7 +37,7 @@ namespace API.Services
 
             var LimiteDiario = infoBank.DiaPagamento.Day;
 
-
+            throw new NotImplementedException();
         }
 
         public async Task<bool> EditarInfoBank(EdicaoIndicadoresDto edicaoIndicadores)
@@ -87,10 +87,10 @@ namespace API.Services
             return (query, param);
         }
 
-        protected async decimal CalcularLimiteGastoDiario()
+        protected async Task<decimal> CalcularLimiteGastoDiario()
         {
             var dias = CalcularDiasAtePagamento();
-
+            throw new NotImplementedException();
         }
 
         protected async Task<int> CalcularDiasAtePagamento()

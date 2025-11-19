@@ -22,7 +22,7 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(AnotacaoResponseDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ObterAnotacoesPorDia(DateTime date)
+        public async Task<IActionResult> ObterAnotacoesPorDia(DateTime? date)
         {
             return Ok(await _service.ObterAnotacoesPorDia(date));
         }

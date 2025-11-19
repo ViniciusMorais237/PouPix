@@ -39,8 +39,6 @@ namespace API.Controllers
         {
             return Ok(await _comprasService.GetHistoricoCompras(data.ToString()));
         }
-        
-        [HttpGet()]
 
 
         [HttpPost("categorias")]

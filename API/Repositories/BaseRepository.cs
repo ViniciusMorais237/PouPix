@@ -27,6 +27,7 @@ namespace API.Repositories
             throw new NotImplementedException();
         }
 
+
         public async Task<IEnumerable<T>> GetAll<T>(string query, DynamicParameters? param = null)
         {
             try

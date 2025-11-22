@@ -19,13 +19,15 @@ namespace API.Config
                 var connectionString = config.GetConnectionString("DefaultConnection");
                 return new SqlConnection(connectionString);
             });
-
-            services.AddScoped<IInfoBankService, InfoBankService>();
-            services.AddScoped<IInfoBankRepository, InfoBankRepository>();
             services.AddScoped<IComprasService, ComprasService>();
             services.AddScoped<IComprasRepository, ComprasRepository>();
             services.AddScoped<IAnotacoesService, AnotacoesService>();
             services.AddScoped<IAnotacoesRepository, AnotacoesRepository>();
+
+            services.AddScoped<IMoneytarioService, MoneytarioService>();
+            services.AddScoped<IMoneytarioRepository, MoneytarioRepository>();
+
+            
 
             return services;
         }

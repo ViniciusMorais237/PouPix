@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Entities;
 using API.Interfaces;
 using API.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,13 @@ namespace API.Controllers
         public async Task<IActionResult> CalcularTeto(DateTime data)
         {
             return Ok(await _moneytarioService.CalcularLimiteFixo(data));
+        }
+
+        [HttpGet("calculo-monetario-diario")]
+        [ProducesResponseType(typeof(InfoMoneyDiario), StatusCodes.Status200OK)]
+        private async Task<IActionResult> CalcularMonetariDiario(DateTime data)
+        {
+            return Ok(await _moneytarioService.CalcularMonetarioDiario(data));
         }
 
         [HttpGet]

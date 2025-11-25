@@ -12,6 +12,6 @@ namespace API.Entities
         public double LimiteFixo { get; set; }
         public double Poupado { get; set; }
         public DateTime DataPagamento { get; set; }
-        public DateTime DataProximoPagamento { get; set; }
+        public DateTime DataProximoPagamento { get => DataPagamento.AddMonths(1); }
     }
 }

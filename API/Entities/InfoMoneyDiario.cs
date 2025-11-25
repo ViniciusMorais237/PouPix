@@ -8,7 +8,7 @@ namespace API.Entities
     public class InfoMoneyDiario
     {
         public DateTime Data { get; set; }
-        public decimal LimiteDiario { get; set; }
-        public decimal TotalGasto { get; set; }
+        public int LimiteDiario { get; set; }
+        public int TotalGasto { get; set; }
     }
 }

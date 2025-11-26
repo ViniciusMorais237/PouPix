@@ -7,6 +7,7 @@ using Dapper;
 using API.Entities;
 using API.Entities.Dto;
 using API.Interfaces.Repositories;
+using Microsoft.OpenApi.Exceptions;
 
 namespace API.Repositories
 {
@@ -35,8 +36,7 @@ namespace API.Repositories
 
         public async Task<IEnumerable<CategoriaCompra>> GetCategorias()
         {
-            var query = GerarSelectQuery(DbCategoriaKeys, TabelaCategoria);
-            return await GetAll<CategoriaCompra>(query);
+            throw new OpenApiException("deu erro pq testando");
         }
 
         public async Task<IEnumerable<HistoricoCompra>> GetHistoricoCompras(string date)

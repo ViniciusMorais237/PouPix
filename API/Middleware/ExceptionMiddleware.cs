@@ -30,9 +30,13 @@ namespace API.Middleware
             {
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = ex switch
+                {
+                    InvalidDataException => StatusCodes.Status422UnprocessableEntity,
+                    _ => StatusCodes.Status400BadRequest
+                } ;
 
-                var response = !_env.IsDevelopment() ?
+                var response = _env.IsDevelopment() ?
                     new ApiException(context.Response.StatusCode.ToString(), ex.Message, ex.StackTrace!.ToString()) :
                     new ApiException(context.Response.StatusCode.ToString(), ex.Message);
 

@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AnotacoesController : ControllerBase
+    public class AnotacoesController : BaseController
     {
         private readonly IAnotacoesService _service;
 

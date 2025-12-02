@@ -9,9 +9,7 @@ using API.Interfaces.Services;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ComprasController : ControllerBase
+    public class ComprasController : BaseController
     {
         private readonly IComprasService _comprasService;
 

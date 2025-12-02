@@ -90,8 +90,6 @@ namespace API.Services
                         sobraDiaria -= pagamento;
                     }
 
-                
-
                     poupadoTotal += sobraDiaria;
 
                     if(poupadoTotal < 0) poupadoTotal = 0;

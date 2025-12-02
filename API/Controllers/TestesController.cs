@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class TestesController : ControllerBase
+    public class TestesController : BaseController
     {
 
         [HttpPost]

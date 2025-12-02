@@ -27,7 +27,9 @@ namespace API.Config
             services.AddScoped<IMoneytarioService, MoneytarioService>();
             services.AddScoped<IMoneytarioRepository, MoneytarioRepository>();
 
-            
+            services.AddScoped<IProdutosService, ProdutosService>();
+
+
 
             return services;
         }

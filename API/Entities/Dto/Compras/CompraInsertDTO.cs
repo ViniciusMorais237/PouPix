@@ -7,11 +7,12 @@ namespace API.Entities.Dto
 {
     public class CompraInsertDTO
     {
-        public string Nome { get; set; }
-        public decimal Valor { get; set; }
+        public int IdBanco { get; set; }
         public int IdCategoria { get; set; }
-        public string? Categoria { get; set; } = "NAO";
+        public int Saldo { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public decimal Valor { get; set; }
+        public int? Prestacao { get; set; } = null;
         public DateTime Data { get; set; } = DateTime.Now;
-        public string? Comentario { get; set; }
     }
 }

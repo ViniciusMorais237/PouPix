@@ -14,7 +14,7 @@ namespace API.Repositories
     public class ComprasRepository : BaseRepository, IComprasRepository
     {
         private readonly string TabelaCategoria = "CATEGORIA_COMPRA";
-        private readonly string TabelaHistorico = "HISTORICO_COMPRA";
+        private readonly string TabelaHistorico = "HISTORICO";
         private readonly Dictionary<string, string> DbCategoriaKeys = new Dictionary<string, string>
         {
             {"Id", "NU_CE_CATEGORIA"},
@@ -23,13 +23,14 @@ namespace API.Repositories
 
         private readonly Dictionary<string, string> DbHistoricoKeys = new Dictionary<string, string>
         {
-            {"Id", "NU_NSU_HISTORICO_COMPRA"},
-            {"Nome", "DE_NOME"},
-            {"Valor", "NU_VALOR"},
-            {"IdCategoria", "NU_CE_CATEGORIA"},
-            {"Categoria", "NO_CATEGORIA"},
-            {"Data", "DT_COMPRA"},
-            {"Comentario", "DE_COMENTARIO"}
+            {"Id", "ID"},
+            {"IdBanco", "ID_BANCO"},
+            {"IdCategoria", "ID_CATEGORIA"},
+            {"Saldo", "SALDO"},
+            {"Nome", "NOME"},
+            {"Valor", "VALOR"},
+            {"Prestacao", "PRESTACAO"},
+            {"Data", "DATA"},
         };
 
         public ComprasRepository(IDbConnection connection) : base(connection) { }
@@ -64,7 +65,7 @@ namespace API.Repositories
 
         public async Task<bool> PostCompra(CompraInsertDTO compra)
         {
-            var dicionarioInsert = GerarDicionarioValoresInseridos(compra, DbHistoricoKeys);
+            var dicionarioInsert = GerarDicionarioValoresInseridos(compra, DbHistoricoKeys, new(){"Id"});
             return await Insert(dicionarioInsert, TabelaHistorico);
         }
     }

@@ -23,11 +23,17 @@ namespace API.Controllers
             return Ok(await _moneytarioService.CalcularLimiteFixo(data));
         }
 
+        [HttpPost("postar-info-diaria")]
+        public async Task<IActionResult> PostarInfoDiaria(DateTime data)
+        {
+            return Ok(await _moneytarioService.InserirInfoDiariaPadrao(data));
+        }
+
         [HttpGet("calculo-monetario-diario")]
         // [ProducesResponseType(typeof(InfoMoneyDiario), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CalcularMonetariDiario(DateTime data)
+        public async Task<IActionResult> CalcularMonetariDiario(DateTime data, int idBanco)
         {
-            return Ok(await _moneytarioService.CalcularMonetarioDiario(data));
+            return Ok(await _moneytarioService.CalcularMonetarioDiario(data, idBanco));
         }
 
         [HttpGet]

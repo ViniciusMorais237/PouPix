@@ -8,8 +8,9 @@ namespace API.Interfaces.Services
 {
     public interface IMoneytarioService
     {
-        Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data);
+        Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data, int idBanco);
         Task<int> CalcularLimiteFixo(DateTime data);
         Task<InfoMoneyMes> ObterInfoMes(DateTime data);
+        Task<bool> InserirInfoDiariaPadrao(DateTime data);
     }
 }

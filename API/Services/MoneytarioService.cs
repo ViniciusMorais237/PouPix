@@ -38,8 +38,12 @@ namespace API.Services
 
         public async Task<InfoMoneyMes> ObterInfoMes(DateTime data)
         {
-            var dataMap = data;
-            return await _moneytarioRepository.ObterInfoMes(dataMap);
+            return await _moneytarioRepository.ObterInfoMes(data);
+        }
+
+        public async Task<List<InfoMoneyDiario>> ObterInfoDiario(DateTime data)
+        {
+            return (await _moneytarioRepository.ObterInfoDiariaMensal(data)).ToList();
         }
 
         public int CalcularDiasEntrePagamentos(DateTime ultimoPagamento, DateTime proximoPagamento)
@@ -50,34 +54,46 @@ namespace API.Services
             return (proximoPagamento - ultimoPagamento).Days;
         }
 
-        public async Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data)
+        public async Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data, int idBanco)
         {
-            int limiteMensalDiario = await CalcularLimiteFixo(data);
-            int saldoAtual = 2751;
+            int limiteFixo = await CalcularLimiteFixo(data);
+            int limiteDinamico = limiteFixo;
+            var historico = await _moneytarioRepository.ObterHistorico(data);
+            var banco = await _moneytarioRepository.ObterInfoBanco(idBanco) ?? throw new Exception("banco inexistente");
+            var saldo = banco.Saldo;
 
-            var dias = GerarListaDiasMock(data, data.AddMonths(1));
-            var historico = new List<(DateTime data, int Saldo)>();
+            var dias = GerarListaDiasMock(data, data.AddMonths(1), limiteFixo);
+            var diasRetornar = new List<InfoMoneyDiario>();
 
             int poupadoTotal = 0;
             int dividaAcumulada = 0;
 
             foreach (var dia in dias)
             {
-                var limiteBase = limiteMensalDiario;
-                dia.LimiteDiario = limiteBase + poupadoTotal;
+                var gasto = historico.Any(h => h?.Data.Date == dia.Data.Date) ? historico.Select(h => h!.Valor).Sum() : 0;
+                diasRetornar.Add(new InfoMoneyDiario
+                {
+                    Data = dia.Data,
+                    Gasto = gasto,
+                    LimiteFixo = limiteFixo,
+                    LimiteDinamico = limiteDinamico + poupadoTotal
+                });
 
-                int sobraDiaria = limiteBase - dia.TotalGasto;
+                limiteDinamico -= gasto;
 
-                saldoAtual = saldoAtual - dia.TotalGasto;
+                int sobraDiaria = limiteFixo - dia.Gasto;
+                saldo -= dia.Gasto;
 
-                historico.Add(new(dia.Data, saldoAtual));
+                banco.Saldo -= dia.Gasto;
 
                 if (sobraDiaria < 0)
                 {
                     dividaAcumulada += sobraDiaria;
 
                     var proximoDia = dia.Data.AddDays(1);
-                    limiteMensalDiario = await CalcularLimiteFixo(proximoDia, historico.Where(h => h.data == dia.Data).Select(h => h.Saldo).First());
+                    limiteFixo = await CalcularLimiteFixo(proximoDia, saldo);
+
+                    // historico.Where(h => h?.Data == dia.Data).Select(h => h!.Saldo).FirstOrDefault()
 
                     poupadoTotal = 0;
                 }
@@ -92,18 +108,16 @@ namespace API.Services
 
                     poupadoTotal += sobraDiaria;
 
-                    if(poupadoTotal < 0) poupadoTotal = 0;
+                    if (poupadoTotal < 0) poupadoTotal = 0;
                 }
             }
 
-            return dias;
+            return diasRetornar;
         }
 
-        private List<InfoMoneyDiario> GerarListaDiasMock(DateTime dataInicio, DateTime dataFim)
+        private List<InfoMoneyDiario> GerarListaDiasMock(DateTime dataInicio, DateTime dataFim, int limiteFixo)
         {
             List<InfoMoneyDiario> datas = new();
-
-            var random = new Random();
 
             var data = dataInicio;
 
@@ -112,13 +126,22 @@ namespace API.Services
                 datas.Add(new InfoMoneyDiario
                 {
                     Data = data,
-                    TotalGasto = random.Next(45, 120)
+                    Gasto = 0,
+                    LimiteFixo = limiteFixo,
+                    LimiteDinamico = limiteFixo
                 });
 
                 data = data.AddDays(1);
             }
 
             return datas;
+        }
+
+        public async Task<bool> InserirInfoDiariaPadrao(DateTime data)
+        {
+            var limiteFixo = await CalcularLimiteFixo(data);
+            var diasMock = GerarListaDiasMock(data, data.AddMonths(1), limiteFixo);
+            return await _moneytarioRepository.InserirInfoDiariaPadrao(diasMock);
         }
     }
 }

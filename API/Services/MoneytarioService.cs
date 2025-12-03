@@ -93,8 +93,6 @@ namespace API.Services
                     var proximoDia = dia.Data.AddDays(1);
                     limiteFixo = await CalcularLimiteFixo(proximoDia, saldo);
 
-                    // historico.Where(h => h?.Data == dia.Data).Select(h => h!.Saldo).FirstOrDefault()
-
                     poupadoTotal = 0;
                 }
                 else

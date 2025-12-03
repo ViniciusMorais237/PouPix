@@ -41,5 +41,10 @@ namespace API.Controllers
         {
             return Ok(await _moneytarioService.ObterInfoMes(data));
         }
+        [HttpPost("inserir-info-mes")]
+        public async Task<IActionResult> InserirInfoMes()
+        {
+            return Ok(await _moneytarioService.InserirInfoMes());
+        }
     }
 }

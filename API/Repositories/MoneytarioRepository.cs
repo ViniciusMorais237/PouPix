@@ -44,24 +44,31 @@ namespace API.Repositories
 
         public async Task<IEnumerable<InfoMoneyDiario>> ObterInfoDiariaMensal(DateTime data)
         {
-            return await GetConnection().QueryAsync<InfoMoneyDiario>(@"SELECT [DATA] AS Data
-                                                                     ,[GASTO] AS Gasto
-                                                                     ,[LIMITE_DINAMICO] AS LimiteDinamico
-                                                                     ,[LIMITE_FIXO_BASE] AS LimiteFixo
-                                                                 FROM [LifeManagement].[dbo].[InfoMoneyDiario]
-                                                                 WHERE DATA BETWEEN @DATAINICIO AND @DATAFIM", new { DATAINICIO = data, DATAFIM = data.AddMonths(1) });
+            return await GetConnection()
+            .QueryAsync<InfoMoneyDiario>
+            (@"SELECT [DATA] AS Data
+            ,[GASTO] AS Gasto
+            ,[LIMITE_DINAMICO] AS LimiteDinamico
+            ,[LIMITE_FIXO_BASE] AS LimiteFixo
+            FROM [LifeManagement].[dbo].[InfoMoneyDiario]
+            WHERE DATA BETWEEN @DATAINICIO AND @DATAFIM",
+             new { DATAINICIO = data, DATAFIM = data.AddMonths(1) });
         }
 
         public async Task<InfoMoneyMes> ObterInfoMes(DateTime data)
         {
-            return await GetConnection().QueryFirstAsync<InfoMoneyMes>(@"SELECT TOP 1
-                                                         [ENTRADA] AS Entrada
-                                                        ,[INVESTIMENTO] AS PorcentagemInvestimento
-                                                        ,[LIMITE_FIXO] AS LimiteFixo
-                                                        ,[POUPADO] AS Poupado
-                                                        ,[DATA_PAGAMENTO] AS DataPagamento
-                                                        FROM [LifeManagement].[dbo].[InfoMoneyMes] WHERE 
-                                                        DATA_PAGAMENTO <= @DATA", new { DATA = data });
+            return await GetConnection()
+            .QueryFirstAsync<InfoMoneyMes>
+            (@"SELECT TOP 1
+             [ENTRADA] AS Entrada
+            ,[INVESTIMENTO] AS PorcentagemInvestimento
+            ,[LIMITE_FIXO] AS LimiteFixo
+            ,[POUPADO] AS Poupado
+            ,[DATA_PAGAMENTO] AS DataPagamento
+            FROM [LifeManagement].[dbo].[InfoMoneyMes] WHERE 
+            DATA_PAGAMENTO <= @DATA
+            ORDER BY DATA_PAGAMENTO DESC",
+             new { DATA = data });
         }
     }
 }

@@ -28,6 +28,7 @@ namespace API.Config
             services.AddScoped<IMoneytarioRepository, MoneytarioRepository>();
 
             services.AddScoped<IProdutosService, ProdutosService>();
+            services.AddScoped<IProdutosRepository, ProdutosRepository>();
 
 
 

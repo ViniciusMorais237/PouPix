@@ -25,13 +25,7 @@ namespace API.Controllers
             return Ok(await _comprasService.PostCompra(compra));
         }
 
-        [HttpGet("{date}")]
-        [ProducesResponseType(typeof(HistoricoCompra), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetHistorico(string date)
-        {
-            return Ok(await _comprasService.GetHistoricoCompras(date));
-        }
-        [HttpGet("")]
+        [HttpGet("{data}")]
         [ProducesResponseType(typeof(HistoricoCompra), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetHistorico(DateTime data)
         {

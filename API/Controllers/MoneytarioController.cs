@@ -18,23 +18,23 @@ namespace API.Controllers
         }
 
         [HttpGet("calculo-teto")]
-        public async Task<IActionResult> CalcularTeto(DateTime data)
+        public async Task<IActionResult> CalcularTeto(DateTime data, DateTime dataProximoPagamento, int valorEntrada)
         {
-            return Ok(await _moneytarioService.CalcularLimiteFixo(data));
+            return Ok(await _moneytarioService.CalcularLimiteFixo(data, dataProximoPagamento, valorEntrada));
         }
 
         [HttpPost("postar-info-diaria")]
-        public async Task<IActionResult> PostarInfoDiaria(DateTime data)
+        public async Task<IActionResult> PostarInfoDiaria(DateTime data, DateTime dataProximoPagamento, int valor)
         {
-            return Ok(await _moneytarioService.InserirInfoDiariaPadrao(data));
+            return Ok(await _moneytarioService.InserirInfoDiariaPadrao(data, dataProximoPagamento, valor));
         }
 
-        [HttpGet("calculo-monetario-diario")]
-        // [ProducesResponseType(typeof(InfoMoneyDiario), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CalcularMonetariDiario(DateTime data, int idBanco)
-        {
-            return Ok(await _moneytarioService.CalcularMonetarioDiario(data, idBanco));
-        }
+        // [HttpGet("calculo-monetario-diario")]
+        // // [ProducesResponseType(typeof(InfoMoneyDiario), StatusCodes.Status200OK)]
+        // public async Task<IActionResult> CalcularMonetariDiario(DateTime data, int valorEntrada, int idBanco)
+        // {
+            // return Ok(await _moneytarioService.CalcularMonetarioDiario(data, valorEntrada, idBanco));
+        // }
 
         [HttpGet]
         public async Task<IActionResult> InfoMes(DateTime data)

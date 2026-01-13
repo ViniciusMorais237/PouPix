@@ -37,7 +37,7 @@ namespace API.Repositories
 
         public async Task<IEnumerable<CategoriaCompra>> GetCategorias()
         {
-            throw new OpenApiException("deu erro pq testando");
+            return await GetConnection().QueryAsync<CategoriaCompra>("SELECT * FROM CATEGORIA_COMPRA");
         }
 
         public async Task<IEnumerable<HistoricoCompra>> GetHistoricoCompras(string date)
@@ -55,12 +55,9 @@ namespace API.Repositories
 
         public async Task<bool> PostCategoria(string nome)
         {
-            Dictionary<string, object> propriedadeInserida = new Dictionary<string, object>
-            {
-                {"NO_CATEGORIA", $"{nome}"}
-            };
-
-            return await Insert(propriedadeInserida, TabelaCategoria);
+            return await GetConnection()
+            .ExecuteAsync("INSERT INTO CATEGORIA_COMPRA(NOME) VALUES(@NOME)"
+            , new {NOME = nome}) > 0;
         }
 
         public async Task<bool> PostCompra(CompraInsertDTO compra)

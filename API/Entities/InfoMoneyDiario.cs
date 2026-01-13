@@ -16,6 +16,7 @@ namespace API.Entities
         public int LimiteDinamico { get; set; }
         public int LimiteFixo { get; set; }
         public int? Sobra { get; set; } = null;
+        public int PoupadoAtual { get; set; }
 
         private void CalcularSobra()
         {

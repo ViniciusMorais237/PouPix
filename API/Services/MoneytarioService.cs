@@ -18,13 +18,10 @@ namespace API.Services
             _moneytarioRepository = moneytarioRepository;
         }
 
-        public async Task<int> CalcularLimiteFixo(DateTime data)
+        public async Task<int> CalcularLimiteFixo(DateTime dataEntrada, DateTime dataProximoPagamento, int valorEntrada)
         {
-            var infoMes = await _moneytarioRepository.ObterInfoMes(data);
-            int dias = CalcularDiasEntrePagamentos(infoMes.DataPagamento, infoMes.DataProximoPagamento);
-            var valorReserva = infoMes.Entrada * infoMes.PorcentagemInvestimento / 100;
-            var valorRestante = infoMes.Entrada - valorReserva;
-            return (int)(valorRestante / dias);
+            int dias = CalcularDiasEntrePagamentos(dataEntrada, dataProximoPagamento);
+            return valorEntrada / dias;
         }
 
         public async Task<int> CalcularLimiteFixo(DateTime data, int saldoAtual)
@@ -54,9 +51,9 @@ namespace API.Services
             return (proximoPagamento - ultimoPagamento).Days;
         }
 
-        public async Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data, int idBanco)
+        public async Task<IEnumerable<InfoMoneyDiario>> CalcularMonetarioDiario(DateTime data, DateTime dataProximoPagamento, int valorEntrada, int idBanco)
         {
-            int limiteFixo = await CalcularLimiteFixo(data);
+            int limiteFixo = await CalcularLimiteFixo(data, dataProximoPagamento, valorEntrada);
             int limiteDinamico = limiteFixo;
             var historico = await _moneytarioRepository.ObterHistorico(data);
             var banco = await _moneytarioRepository.ObterInfoBanco(idBanco) ?? throw new Exception("banco inexistente");
@@ -76,7 +73,8 @@ namespace API.Services
                     Data = dia.Data,
                     Gasto = gasto,
                     LimiteFixo = limiteFixo,
-                    LimiteDinamico = limiteDinamico + poupadoTotal
+                    LimiteDinamico = limiteDinamico + poupadoTotal,
+                    PoupadoAtual = poupadoTotal
                 });
 
                 limiteDinamico -= gasto;
@@ -92,6 +90,7 @@ namespace API.Services
 
                     var proximoDia = dia.Data.AddDays(1);
                     limiteFixo = await CalcularLimiteFixo(proximoDia, saldo);
+                    limiteDinamico = limiteFixo;
 
                     poupadoTotal = 0;
                 }
@@ -135,10 +134,10 @@ namespace API.Services
             return datas;
         }
 
-        public async Task<bool> InserirInfoDiariaPadrao(DateTime data)
+        public async Task<bool> InserirInfoDiariaPadrao(DateTime data, DateTime dataProximoPagamento, int valor)
         {
-            var limiteFixo = await CalcularLimiteFixo(data);
-            var diasMock = GerarListaDiasMock(data, data.AddMonths(1), limiteFixo);
+            var limiteFixo = await CalcularLimiteFixo(data, dataProximoPagamento, valor);
+            var diasMock = GerarListaDiasMock(data, dataProximoPagamento, limiteFixo);
             return await _moneytarioRepository.InserirInfoDiariaPadrao(diasMock);
         }
     }

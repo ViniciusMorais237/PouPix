@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.Entities.Produto
 {
-    public class InfoProuto
+    public class InfoProduto
     {
         public string Nome { get; set; } = string.Empty;
         public double Valor { get; set; }

@@ -9,9 +9,10 @@ using API.Interfaces.Repositories;
 
 namespace API.Repositories
 {
-    public abstract class BaseRepository
+    public class BaseRepository
     {
-        private readonly IDbConnection _connection;
+        protected IDbConnection _connection;
+        protected IDbTransaction? _transaction;
         public BaseRepository(IDbConnection connection)
         {
             _connection = connection;
@@ -19,7 +20,22 @@ namespace API.Repositories
 
         public IDbConnection GetConnection()
         {
+            _connection.Open();
             return _connection;
+        }
+
+        public IDbTransaction BeginTransaction()
+        {
+            _connection.Open();
+            _transaction = _connection.BeginTransaction();
+            return _transaction;
+        }
+
+        public void Commit()
+        {
+            _transaction?.Commit();
+            _connection.Close();
+            _transaction?.Dispose();
         }
 
         public Task<bool> Delete(object id)
